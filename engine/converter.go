@@ -125,6 +125,10 @@ func (mc *MultipleConverter) validate() error {
 		}
 	}
 
+	if len(validInput) == 0 {
+		return errors.New("All of the file path pairs provided are invalid! Exiting...")
+	}
+
 	mc.inputPaths = validInput
 	mc.outputPaths = validOutput
 
