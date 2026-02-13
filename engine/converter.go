@@ -58,11 +58,11 @@ func (mc *MultipleConverter) checkPathDuplicates() error {
 func (mc *MultipleConverter) validate() error {
 
 	if mc.inputPaths == nil {
-		return errors.New("Input paths (-f CLI argument) can't be empty!")
+		return errors.New("Input paths (-f CLI flag) can't be empty!")
 	}
 
 	if !mc.isPreview && len(mc.outputPaths) == 0 {
-		return errors.New("In case, if mode is 'generate' ('generate' CLI argument), output file paths should be specified!")
+		return errors.New("In case, if mode is 'generate' ('generate' CLI argument), output file path (-o CLI flag) should be specified!")
 	}
 
 	if dpError := mc.checkPathDuplicates(); dpError != nil {
