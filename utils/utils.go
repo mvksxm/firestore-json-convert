@@ -27,18 +27,19 @@ func ValidatePaths(paths []string, isInput bool, vc chan <- models.StampedPath, 
 
 func ValidatePath(path string, isInput bool) (bool, string) {
 	
-	// TODO:
-	// Add an initial check to make sure that paths provided are generally valid UNIX paths.
-	// Add a check for making sure that path for the input file is not a dir.
-
-	pathToCheck := ""
-	if isInput {
-		pathToCheck = path
-	} else {
-		pathToCheck = filepath.Dir(path)
+	// Check if paths provided are not dirs
+	pathInfo, err := os.Stat(path)
+	if err == nil && pathInfo.IsDir() {
+		return false, "path provided is an existing directory"
 	}
 
-	if _, err := os.Stat(pathToCheck); err != nil {
+	// In case, if validation errored for input path - return error.
+	if err != nil && isInput {
+		return false, err.Error()
+	}
+
+	// For the output path, we just need to make sure that the parent dir of the path provided is valid. 
+	if _, err := os.Stat(filepath.Dir(path)); err != nil && !isInput {
 		return false, err.Error()
 	}
 
