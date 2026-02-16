@@ -3,11 +3,43 @@ package engine
 import (
 	"errors"
 	"fmt"
+	"log"
+	"log/slog"
 	"os"
 	"sync"
 	"github.com/mvksxm/firestore-json-convert/models"
 	"github.com/mvksxm/firestore-json-convert/utils"
 )
+
+type Converter struct {
+	isPreview bool
+	fileIO FileIO
+}
+
+func NewConverter(isPreview bool, fileIO FileIO) *Converter {
+	return &Converter{
+		isPreview: isPreview,
+		fileIO: fileIO,
+	}
+}
+
+func (c *Converter) Run() {
+	payload, err := c.fileIO.ReadInput()
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	prc := NewProcessor(payload)
+	processedPayload, err := prc.Convert()
+	if err != nil {
+		slog.Warn(err.Error())
+	}
+
+	// plString := fmt.Sprintf("%#v", payload)
+	// fmt.Println(plString)
+
+	c.fileIO.WriteOutput(processedPayload)
+}
 
 type MultipleConverter struct {
 	isPreview bool
@@ -58,11 +90,11 @@ func (mc *MultipleConverter) checkPathDuplicates() error {
 func (mc *MultipleConverter) validate() error {
 
 	if mc.inputPaths == nil {
-		return errors.New("Input paths (-f CLI argument) can't be empty!")
+		return errors.New("Input paths (-f CLI flag) can't be empty!")
 	}
 
 	if !mc.isPreview && len(mc.outputPaths) == 0 {
-		return errors.New("In case, if mode is 'generate' ('generate' CLI argument), output file paths should be specified!")
+		return errors.New("In case, if mode is 'generate' ('generate' CLI argument), output file path (-o CLI flag) should be specified!")
 	}
 
 	if dpError := mc.checkPathDuplicates(); dpError != nil {
@@ -125,6 +157,10 @@ func (mc *MultipleConverter) validate() error {
 		}
 	}
 
+	if len(validInput) == 0 {
+		return errors.New("All of the file path pairs provided are invalid! Exiting...")
+	}
+
 	mc.inputPaths = validInput
 	mc.outputPaths = validOutput
 
@@ -138,13 +174,20 @@ func (mc *MultipleConverter) Run() {
 		fmt.Println(err.Error())
 		os.Exit(1)
 	}
+	
+	for i := range mc.inputPaths {
+		inputPath := mc.inputPaths[i]
+		outputPath := ""
+		if !mc.isPreview {
+			outputPath = mc.outputPaths[i]
+		}
+
+		fileIO := NewFileIO(inputPath, outputPath)
+		conv := NewConverter(mc.isPreview, *fileIO)
+		conv.Run()
+	}
+	
 }
-
-
-// type Converter struct {
-// 	isPreview bool
-// 	payload ...
-// }
 
 
 func NewMultipleConverter(
