@@ -1,6 +1,7 @@
 package engine
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"log"
@@ -31,12 +32,23 @@ func (c *Converter) Run() {
 
 	prc := NewProcessor(payload)
 	processedPayload, err := prc.Convert()
-	if err != nil {
-		slog.Warn(err.Error())
-	}
 
-	// plString := fmt.Sprintf("%#v", payload)
-	// fmt.Println(plString)
+	if err != nil {
+		return
+	}	
+
+	if c.isPreview {
+		payloadStr, err := json.MarshalIndent(processedPayload, "", "    ")
+		if err != nil {
+			slog.Warn(fmt.Sprintf("The following error had occured, when jsonifying the processed payload -  %s", err.Error()))
+		} else {
+			fmt.Println("====================================================================================")
+			fmt.Printf("Preview for file -> %s\n", c.fileIO.GetInputPath())
+			fmt.Println(string(payloadStr))
+			fmt.Println("====================================================================================")
+		}
+		return
+	}
 
 	c.fileIO.WriteOutput(processedPayload)
 }

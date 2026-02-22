@@ -48,6 +48,15 @@ func (fo *FileIO) WriteOutput(payload map[string]interface{}) error {
 	return nil
 }
 
+func (fo *FileIO) GetInputPath() string {
+	return fo.inputPath
+}
+
+func (fo *FileIO) GetOutputPath() string {
+	return fo.outputPath
+}
+
+
 func NewFileIO(inputPath string, outputPath string) *FileIO {
 	return &FileIO{
 		inputPath: inputPath,
