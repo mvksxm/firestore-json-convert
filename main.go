@@ -12,7 +12,8 @@ func main() {
 		log.Fatalln(err.Error())
 	}
 
-	// mc := engine.NewMultipleConverter([]string{"???"}, []string{"???"})
+	// Commented strings for testing purposes.
+	// mc := engine.NewMultipleConverter([]string{"test_firestore_conversion.json", "test_generic.json"}, []string{"test_firestore_conversion_res.json", "test_generic_res.json"})
 	// mc.Run()
 }
 

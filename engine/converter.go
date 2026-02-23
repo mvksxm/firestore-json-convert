@@ -118,8 +118,7 @@ func (mc *MultipleConverter) validate() error {
 
 	if !mc.isPreview && len(mc.outputPaths) != len(mc.inputPaths) {
 		return errors.New(
-			`In generate mode ('generate' CLI argument), 
-			amount of input paths (-f) should be equal to the amount of output paths (-o)`,
+			`In generate mode ('generate' CLI argument), amount of input paths (-f CLI flag) should be equal to the amount of output paths (-o CLI flag)`,
 		)
 	}
 
