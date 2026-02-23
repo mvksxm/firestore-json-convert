@@ -24,7 +24,10 @@ func NewConverter(isPreview bool, fileIO FileIO) *Converter {
 	}
 }
 
-func (c *Converter) Run() {
+func (c *Converter) Run(wg *sync.WaitGroup) {
+
+	defer wg.Done()
+
 	payload, err := c.fileIO.ReadInput()
 	if err != nil {
 		log.Fatalln(err)
@@ -187,6 +190,7 @@ func (mc *MultipleConverter) Run() {
 		os.Exit(1)
 	}
 	
+	convWg := &sync.WaitGroup{}
 	for i := range mc.inputPaths {
 		inputPath := mc.inputPaths[i]
 		outputPath := ""
@@ -196,9 +200,10 @@ func (mc *MultipleConverter) Run() {
 
 		fileIO := NewFileIO(inputPath, outputPath)
 		conv := NewConverter(mc.isPreview, *fileIO)
-		conv.Run()
+		convWg.Add(1)
+		go conv.Run(convWg)
 	}
-	
+	convWg.Wait()
 }
 
 
