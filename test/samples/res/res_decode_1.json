@@ -1,0 +1,20 @@
+{
+    "companyName": "Sunwing",
+    "dateEnd": "Current",
+    "dateStart": "2024-09-16",
+    "jobResponsibilities": [
+        "Served as an individual contributor and maintainer of the core .NET-based backend Sunwing interfaces such as User Profile and User Auth APIs.",
+        "Participated in the integration project with the Westjet Airlines. Specifically, was responsible for interconnection of the core backend Sunwing APIs with internal services of the Westjet.",
+        "Maintained and enhanced internal .NET-based Batch Jobs. Improvement: Introduced an automatic reprocessing logic that reduced the amount of issues that should be handled manually by 80%.",
+        "Continuosly collborated with the Technical Leaders, Product Managers and QA Engineers in order to ensure the maximum quality of the features delivered."
+    ],
+    "location": "Toronto, ON",
+    "logoUrl": "https://raw.githubusercontent.com/mvksxm/personal-website/refs/heads/master/frontend/personal-website/public/images/logos/SunwingLogo.png",
+    "position": "Software Engineer",
+    "technologies": [
+        "C#",
+        ".NET",
+        "Azure",
+        "SQL Server"
+    ]
+}

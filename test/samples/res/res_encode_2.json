@@ -1,0 +1,30 @@
+{   
+    "fields": {
+      "companyName" : { "stringValue" : "Sunwing" },
+      "position" : { "stringValue" : "Software Engineer" },
+      "dateStart" : { "stringValue" : "2024-09-16" },
+      "dateEnd" : { "stringValue" : "Current" },
+      "location" : { "stringValue" : "Toronto, ON" },
+      "logoUrl" : { "stringValue" : "https://raw.githubusercontent.com/mvksxm/personal-website/refs/heads/master/frontend/personal-website/public/images/logos/SunwingLogo.png" },
+      "technologies" : {
+        "arrayValue" : {
+          "values" : [
+            { "stringValue" : "C#" },
+            { "stringValue" : ".NET" },
+            { "stringValue" : "Azure" },
+            { "stringValue" : "SQL Server" }
+          ]
+        }
+      },
+      "jobResponsibilities" : {
+        "arrayValue" : {
+          "values" : [
+            { "stringValue" : "Served as an individual contributor and maintainer of the core .NET-based backend Sunwing interfaces such as User Profile and User Auth APIs." },
+            { "stringValue" : "Participated in the integration project with the Westjet Airlines. Specifically, was responsible for interconnection of the core backend Sunwing APIs with internal services of the Westjet." },
+            { "stringValue" : "Maintained and enhanced internal .NET-based Batch Jobs. Improvement: Introduced an automatic reprocessing logic that reduced the amount of issues that should be handled manually by 80%." },
+            { "stringValue" : "Continuosly collborated with the Technical Leaders, Product Managers and QA Engineers in order to ensure the maximum quality of the features delivered." }
+          ]
+        }
+      }
+    }
+  }

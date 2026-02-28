@@ -1,0 +1,35 @@
+{
+    "fields": {
+      "tags": {
+        "arrayValue": {
+          "values": [
+            { "stringValue": "golang" },
+            { "stringValue": "firestore" },
+            { "integerValue": "1" }
+          ]
+        }
+      },
+      "profile": {
+        "mapValue": {
+          "fields": {
+            "firstName": {
+              "stringValue": "John"
+            },
+            "lastName": {
+              "stringValue": "Doe"
+            },
+            "preferences": {
+              "mapValue": {
+                "fields": {
+                  "newsletter": {
+                    "booleanValue": false
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  

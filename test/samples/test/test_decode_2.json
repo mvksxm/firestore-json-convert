@@ -1,0 +1,55 @@
+{   
+    "fields": {
+        "age": {
+            "integerValue": "29"
+        },
+        "createdAt": {
+            "timestampValue": "2024-10-01T12:00:00Z"
+        },
+        "email": {
+            "stringValue": "john.doe@example.com"
+        },
+        "isActive": {
+            "booleanValue": true
+        },
+        "profile": {
+            "mapValue": {
+                "fields": {
+                    "address": {
+                        "mapValue": {
+                            "fields": {
+                                "city": {
+                                    "stringValue": "Berlin"
+                                },
+                                "street": {
+                                    "stringValue": "123 Main St"
+                                },
+                                "zip": {
+                                    "stringValue": "10115"
+                                }
+                            }
+                        }
+                    },
+                    "firstName": {
+                        "stringValue": "John"
+                    },
+                    "lastName": {
+                        "stringValue": "Doe"
+                    },
+                    "preferences": {
+                        "mapValue": {
+                            "fields": {
+                                "newsletter": {
+                                    "booleanValue": true
+                                },
+                                "theme": {
+                                    "stringValue": "dark"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

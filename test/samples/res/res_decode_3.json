@@ -1,0 +1,9 @@
+{
+    "nothing": null,
+    "active": true,
+    "age": 29,
+    "score": 4.75,
+    "createdAt": "2024-10-01T12:00:00Z",
+    "email": "john.doe@example.com",
+    "rawData": "dGVzdAo="
+}

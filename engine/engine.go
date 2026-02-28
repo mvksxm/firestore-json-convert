@@ -211,19 +211,18 @@ func handleGoSingularType(val interface{}, firestoreType string) map[string]inte
 	return firestoreObject
 }
 
-func handleIntType(value interface{}) (int, error) {
-	strInt, ok := value.(string)
+func handleIntFloatType(value interface{}) (float64, error) {
+	strNum, ok := value.(string)
 	if !ok {
-		return 0, errors.New("integer value is supposed to be in a form of a string")
+		return 0, errors.New("Integer/Double value is supposed to be provided in a form of a string")
 	}
 
-	// Convert to int
-	intVal, err := strconv.Atoi(strInt)
+	floatNum, err := strconv.ParseFloat(strNum, 64)
 	if err != nil {
-		return 0, errors.New("string value provided for the integer type is not a number")
+		return 0, err
 	}
 
-	return intVal, nil
+	return floatNum, nil
 }
 
 
@@ -263,25 +262,26 @@ func handleFirestoreType(childPayload map[string]interface{}, path string) (inte
 		return nil, errors.New(generateErrorMessage(path, typeKey, "Value is not a boolean type."))
 	case "integerValue":
 		path += "/integerValue"
-		val, err := handleIntType(typeVal)
+		val, err := handleIntFloatType(typeVal)
 		if err == nil {
 			return val, nil
 		}
 		return nil, errors.New(generateErrorMessage(path, typeKey, err.Error()))
 	case "doubleValue":
 		path += "/doubleValue"
-		if val, err := handleSingularType[float64](typeVal); err == nil {
-			return val, nil
+		val, err := handleIntFloatType(typeVal)
+		if err != nil {
+			return nil, errors.New(generateErrorMessage(path, typeKey, err.Error()))
 		}
-		return nil, errors.New(generateErrorMessage(path, typeKey, "Value is not a double type."))
+		return val, nil
 	case "stringValue":
 		path += "/stringValue"
 		if val, err := handleSingularType[string](typeVal); err == nil {
 			return val, nil
 		}
 		return nil, errors.New(generateErrorMessage(path, typeKey, "Value is not a string type."))
-	case "byteValue":
-		path += "/byteValue"
+	case "bytesValue":
+		path += "/bytesValue"
 		val, err := handleByteValue(typeVal)
 		if err == nil {
 			return val, nil
@@ -323,7 +323,7 @@ func handleGoType(payloadVal interface{}, path string) (interface{}, error) {
 		case string:
 			// Check if byte
 			if _, err := handleByteValue(payloadVal); err == nil {
-				return handleGoSingularType(payloadVal, "byteValue"), nil
+				return handleGoSingularType(payloadVal, "bytesValue"), nil
 			}
 			// Check if timestamp
 			if _, err := handleTimestampValue(payloadVal); err == nil {
@@ -361,7 +361,25 @@ func handleGoType(payloadVal interface{}, path string) (interface{}, error) {
 
 func DecodeFromFirestore(payload map[string]interface{}) (map[string]interface{}, error) {
 	resPayload := make(map[string]interface{})
-	for k, v := range payload {
+
+	fieldsFound := false
+	for k := range payload {
+		if k == "fields" {
+			fieldsFound = true
+			break;
+		}
+	}
+
+	if !fieldsFound {
+		return nil, errors.New("'fields' root parameter is required for the appropiate Firestore API payload.")
+	}
+
+	payloadFields, ok := payload["fields"].(map[string]interface{})
+	if !ok {
+		return nil, errors.New("data under the 'field' key of the payload can't be converted to the go map.")
+	}
+
+	for k, v := range payloadFields {
 		valMap, ok := v.(map[string]interface{})
 		if !ok {
 			return nil, fmt.Errorf("Can't cast an object under the following key - %s to a map", k)
@@ -377,6 +395,8 @@ func DecodeFromFirestore(payload map[string]interface{}) (map[string]interface{}
 
 func EncodeToFirestore(payload map[string]interface{}) (map[string]interface{}, error) {
 	encodedPayload := make(map[string]interface{})
+	resPayload := make(map[string]interface{})
+
 	for k, v := range payload {
 		encodedVal, err := handleGoType(v, k)
 		if err != nil {
@@ -384,5 +404,6 @@ func EncodeToFirestore(payload map[string]interface{}) (map[string]interface{}, 
 		}
 		encodedPayload[k] = encodedVal
 	}
-	return encodedPayload, nil
+	resPayload["fields"] = encodedPayload
+	return resPayload, nil
 }
