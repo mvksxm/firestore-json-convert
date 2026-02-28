@@ -211,19 +211,18 @@ func handleGoSingularType(val interface{}, firestoreType string) map[string]inte
 	return firestoreObject
 }
 
-func handleIntType(value interface{}) (int, error) {
-	strInt, ok := value.(string)
+func handleIntFloatType(value interface{}) (float64, error) {
+	strNum, ok := value.(string)
 	if !ok {
-		return 0, errors.New("integer value is supposed to be in a form of a string")
+		return 0, errors.New("Integer/Double value is supposed to be provided in a form of a string")
 	}
 
-	// Convert to int
-	intVal, err := strconv.Atoi(strInt)
+	floatNum, err := strconv.ParseFloat(strNum, 64)
 	if err != nil {
-		return 0, errors.New("string value provided for the integer type is not a number")
+		return 0, err
 	}
 
-	return intVal, nil
+	return floatNum, nil
 }
 
 
@@ -263,17 +262,18 @@ func handleFirestoreType(childPayload map[string]interface{}, path string) (inte
 		return nil, errors.New(generateErrorMessage(path, typeKey, "Value is not a boolean type."))
 	case "integerValue":
 		path += "/integerValue"
-		val, err := handleIntType(typeVal)
+		val, err := handleIntFloatType(typeVal)
 		if err == nil {
 			return val, nil
 		}
 		return nil, errors.New(generateErrorMessage(path, typeKey, err.Error()))
 	case "doubleValue":
 		path += "/doubleValue"
-		if val, err := handleSingularType[float64](typeVal); err == nil {
-			return val, nil
+		val, err := handleIntFloatType(typeVal)
+		if err != nil {
+			return nil, errors.New(generateErrorMessage(path, typeKey, err.Error()))
 		}
-		return nil, errors.New(generateErrorMessage(path, typeKey, "Value is not a double type."))
+		return val, nil
 	case "stringValue":
 		path += "/stringValue"
 		if val, err := handleSingularType[string](typeVal); err == nil {
