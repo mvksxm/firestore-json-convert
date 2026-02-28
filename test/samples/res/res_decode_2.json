@@ -1,0 +1,19 @@
+{
+    "email": "john.doe@example.com",
+    "age": 29,
+    "isActive": true,
+    "profile": {
+      "firstName": "John",
+      "lastName": "Doe",
+      "address": {
+        "street": "123 Main St",
+        "city": "Berlin",
+        "zip": "10115"
+      },
+      "preferences": {
+        "newsletter": true,
+        "theme": "dark"
+      }
+    },
+    "createdAt": "2024-10-01T12:00:00Z"
+}

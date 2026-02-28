@@ -1,0 +1,11 @@
+{
+    "tags": ["golang", "firestore", 1],
+    "profile": {
+      "firstName": "John",
+      "lastName": "Doe",
+      "preferences": {
+        "newsletter": false
+      }
+    }
+  }
+  

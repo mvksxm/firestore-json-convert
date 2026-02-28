@@ -1,0 +1,25 @@
+{
+    "fields": {
+      "nothing": {
+        "nullValue": null
+      },
+      "active": {
+        "booleanValue": true
+      },
+      "age": {
+        "integerValue": "29"
+      },
+      "score": {
+        "doubleValue": "4.75"
+      },
+      "createdAt": {
+        "timestampValue": "2024-10-01T12:00:00Z"
+      },
+      "email": {
+        "stringValue": "john.doe@example.com"
+      },
+      "rawData": {
+        "bytesValue": "dGVzdAo="
+      }
+    }
+  }
