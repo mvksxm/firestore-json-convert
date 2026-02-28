@@ -280,8 +280,8 @@ func handleFirestoreType(childPayload map[string]interface{}, path string) (inte
 			return val, nil
 		}
 		return nil, errors.New(generateErrorMessage(path, typeKey, "Value is not a string type."))
-	case "byteValue":
-		path += "/byteValue"
+	case "bytesValue":
+		path += "/bytesValue"
 		val, err := handleByteValue(typeVal)
 		if err == nil {
 			return val, nil
@@ -323,7 +323,7 @@ func handleGoType(payloadVal interface{}, path string) (interface{}, error) {
 		case string:
 			// Check if byte
 			if _, err := handleByteValue(payloadVal); err == nil {
-				return handleGoSingularType(payloadVal, "byteValue"), nil
+				return handleGoSingularType(payloadVal, "bytesValue"), nil
 			}
 			// Check if timestamp
 			if _, err := handleTimestampValue(payloadVal); err == nil {
