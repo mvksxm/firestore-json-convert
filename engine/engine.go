@@ -361,7 +361,25 @@ func handleGoType(payloadVal interface{}, path string) (interface{}, error) {
 
 func DecodeFromFirestore(payload map[string]interface{}) (map[string]interface{}, error) {
 	resPayload := make(map[string]interface{})
-	for k, v := range payload {
+
+	fieldsFound := false
+	for k := range payload {
+		if k == "fields" {
+			fieldsFound = true
+			break;
+		}
+	}
+
+	if !fieldsFound {
+		return nil, errors.New("'fields' root parameter is required for the appropiate Firestore API payload.")
+	}
+
+	payloadFields, ok := payload["fields"].(map[string]interface{})
+	if !ok {
+		return nil, errors.New("data under the 'field' key of the payload can't be converted to the go map.")
+	}
+
+	for k, v := range payloadFields {
 		valMap, ok := v.(map[string]interface{})
 		if !ok {
 			return nil, fmt.Errorf("Can't cast an object under the following key - %s to a map", k)
@@ -377,6 +395,8 @@ func DecodeFromFirestore(payload map[string]interface{}) (map[string]interface{}
 
 func EncodeToFirestore(payload map[string]interface{}) (map[string]interface{}, error) {
 	encodedPayload := make(map[string]interface{})
+	resPayload := make(map[string]interface{})
+
 	for k, v := range payload {
 		encodedVal, err := handleGoType(v, k)
 		if err != nil {
@@ -384,5 +404,6 @@ func EncodeToFirestore(payload map[string]interface{}) (map[string]interface{}, 
 		}
 		encodedPayload[k] = encodedVal
 	}
-	return encodedPayload, nil
+	resPayload["fields"] = encodedPayload
+	return resPayload, nil
 }
